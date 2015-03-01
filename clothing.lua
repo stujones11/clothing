@@ -1,6 +1,8 @@
 CLOTHING_INIT_DELAY = 1
 CLOTHING_INIT_TIMES = 1
 
+local inv_mod = nil
+
 clothing = {
 	formspec = "size[8,8.5]list[detached:player_name_clothing;clothing;0,1;2,3;]"
 		.."image[2,0.75;2,4;clothing_preview]"
@@ -10,12 +12,14 @@ clothing = {
 	textures = {},
 }
 
-if inventory_plus then
+if minetest.get_modpath("inventory_plus") then
+	inv_mod = "inventory_plus"
 	clothing.formspec = "size[8,8.5]button[0,0;2,0.5;main;Back]"
 		.."list[detached:player_name_clothing;clothing;0,1;2,3;]"
 		.."image[2.5,0.75;2,4;clothing_preview]"
 		.."list[current_player;main;0,4.5;8,4;]"
-elseif unified_inventory then
+elseif minetest.get_modpath("unified_inventory") then
+	inv_mod = "unified_inventory"
 	unified_inventory.register_button("clothing", {
 		type = "image",
 		image = "inventory_plus_clothing.png",
@@ -77,13 +81,13 @@ end
 
 clothing.update_inventory = function(self, player)
 	local name = player:get_player_name()
-	if unified_inventory then
+	if inv_mod == "unified_inventory" then
 		if unified_inventory.current_page[name] == "clothing" then
 			unified_inventory.set_inventory_formspec(player, "clothing")
 		end
 	else
 		local formspec = clothing:get_clothing_formspec(name)
-		if inventory_plus then
+		if inv_mod == "inventory_plus" then
 			local page = player:get_inventory_formspec()
 			if page:find("detached:"..name.."_clothing") then
 				inventory_plus.set_inventory_formspec(player, formspec)
@@ -152,7 +156,7 @@ minetest.register_on_joinplayer(function(player)
 	for i=1, CLOTHING_INIT_TIMES do
 		minetest.after(CLOTHING_INIT_DELAY * i, function(player)
 			clothing:set_player_clothing(player)
-			if inventory_plus == nil and unified_inventory == nil then
+			if not inv_mod then
 				clothing:update_inventory(player)
 			end
 		end, player)
