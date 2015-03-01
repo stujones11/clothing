@@ -1,0 +1,13 @@
+Wool Clothing - Wool Clothing [WIP]
+===================================
+
+Depends: multiskin (available as part of 3d_armor 'multiskin' branch
+
+Recommends: inventory_plus or unified_inventory (use only one)
+
+Adds wool clothing to the creative inventory.
+
+TODO:
+
+Add crafting
+Optimize textures
