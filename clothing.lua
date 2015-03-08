@@ -1,5 +1,26 @@
 CLOTHING_INIT_DELAY = 1
 CLOTHING_INIT_TIMES = 1
+CLOTHING_ENABLE_CRAFTING = true
+CLOTHING_ENABLE_PREVIEW = true
+
+-- Load Clothing Configs
+
+local modpath = minetest.get_modpath(minetest.get_current_modname())
+local worldpath = minetest.get_worldpath()
+local input = io.open(modpath.."/clothing.conf", "r")
+if input then
+	dofile(modpath.."/clothing.conf")
+	input:close()
+	input = nil
+end
+input = io.open(worldpath.."/clothing.conf", "r")
+if input then
+	dofile(worldpath.."/clothing.conf")
+	input:close()
+	input = nil
+end
+
+-- Clothing API
 
 local inv_mod = nil
 
@@ -30,7 +51,10 @@ elseif minetest.get_modpath("unified_inventory") then
 			local formspec = "background[0.06,0.99;7.92,7.52;clothing_ui_form.png]"
 				.."label[0,0;Clothing]"
 				.."list[detached:"..name.."_clothing;clothing;0,1;2,3;]"
-				.."image[2.5,0.75;2,4;"..clothing.textures[name].preview.."]"
+			if CLOTHING_ENABLE_PREVIEW then
+				formspec = formspec.."image[2.5,0.75;2,4;"
+					..clothing.textures[name].preview.."]"
+			end
 			return {formspec=formspec}
 		end,
 	})
@@ -45,11 +69,9 @@ clothing.set_player_clothing = function(self, player)
 	if not name or not player_inv then
 		return
 	end
-	local clothing_texture = "clothing_trans.png"
-	local elements = {}
+	local clothing_texture = "multiskin_trans.png"
 	local textures = {}
-	local preview = multiskin:get_skin_name(name) or "clothing_preview"
-	preview = preview..".png"
+	local preview = multiskin:get_preview(name) or "clothing_preview.png"
 	for i=1, 6 do
 		local stack = player_inv:get_stack("clothing", i)
 		local item = stack:get_name()
@@ -75,8 +97,12 @@ clothing.set_player_clothing = function(self, player)
 end
 
 clothing.get_clothing_formspec = function(self, name)
+	local texture = "multiskin_trans.png"
+	if CLOTHING_ENABLE_PREVIEW then
+		texture = clothing.textures[name].preview
+	end
 	local formspec = clothing.formspec:gsub("player_name", name)
-	return formspec:gsub("clothing_preview", clothing.textures[name].preview)
+	return formspec:gsub("clothing_preview", texture)
 end
 
 clothing.update_inventory = function(self, player)
@@ -98,9 +124,11 @@ clothing.update_inventory = function(self, player)
 	end
 end
 
+-- Register Callbacks
+
 minetest.register_on_player_receive_fields(function(player, formname, fields)
 	local name = player:get_player_name()
-	if inventory_plus and fields.clothing then
+	if inv_mod == "inventory_plus" and fields.clothing then
 		local formspec = clothing:get_clothing_formspec(name)
 		inventory_plus.set_inventory_formspec(player, formspec)
 		return
@@ -150,9 +178,10 @@ minetest.register_on_joinplayer(function(player)
 		clothing_inv:set_stack("clothing", i, stack)
 	end	
 	clothing.textures[name] = {
-		clthing = "clothing_trans.png",
+		clthing = "multiskin_trans.png",
 		preview = "clothing_preview.png",
 	}
+	-- FIXME There really has to be a better way of doing this..?
 	for i=1, CLOTHING_INIT_TIMES do
 		minetest.after(CLOTHING_INIT_DELAY * i, function(player)
 			clothing:set_player_clothing(player)

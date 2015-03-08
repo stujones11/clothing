@@ -1,0 +1,14 @@
+-- Increase this if you get initialization glitches when a player first joins.
+CLOTHING_INIT_DELAY = 1
+
+-- Number of initialization attempts.
+-- Use in conjunction with CLOTHING_INIT_DELAY if problems persist.
+CLOTHING_INIT_TIMES = 1
+
+-- Enable simple wool clothes and crafting.
+CLOTHING_ENABLE_CRAFTING = true
+
+-- The inventory window preview may no longer be necessary since there is now
+-- 3rd person view, it also eliminates the need to include preview textures.
+CLOTHING_ENABLE_PREVIEW - true
+
