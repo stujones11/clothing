@@ -168,7 +168,7 @@ minetest.register_on_joinplayer(function(player)
 			return count
 		end,
 	})
-	if inventory_plus then
+	if inv_mod == "inventory_plus" then
 		inventory_plus.register_button(player,"clothing", "Clothing")
 	end
 	clothing_inv:set_size("clothing", 6)
