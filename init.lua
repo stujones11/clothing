@@ -1,16 +1,27 @@
-CLOTHING_DYE_COLORS = {
-	"white", "grey", "black", "red", "yellow", "green", "cyan", "blue",
-	"magenta", "orange", "violet", "brown", "pink", "dark_grey", "dark_green",
+CLOTHING_COLORS = {
+	["wool:white"] = "white",
+	["wool:grey"] = "grey",
+	["wool:black"] = "black",
+	["wool:red"] = "red",
+	["wool:yellow"] = "yellow",
+	["wool:green"] = "green",
+	["wool:cyan"] = "cyan",
+	["wool:blue"] = "blue",
+	["wool:magenta"] = "magenta",
+	["wool:orange"] = "orange",
+	["wool:violet"] = "violet",
+	["wool:brown"] = "brown",
+	["wool:pink"] = "pink",
+	["wool:dark_grey"] = "dark_grey",
+	["wool:dark_green"] = "dark_green",
 }
 
-dofile(minetest.get_modpath(minetest.get_current_modname()).."/clothing.lua")
+local modpath = minetest.get_modpath(minetest.get_current_modname())
 
-if CLOTHING_ENABLE_CRAFTING then
-	local c = "farming:cotton"
-	local x = ""
-	local dep = minetest.get_modpath("farming") and minetest.get_modpath("dye")
-	for _, color in pairs(CLOTHING_DYE_COLORS) do
-		local d = "dye:"..color
+dofile(modpath.."/clothing.lua")
+
+if CLOTHING_ENABLE_CRAFTING and minetest.get_modpath("wool") then
+	for _, color in pairs(CLOTHING_COLORS) do
 		local color_name = color:gsub("%a", string.upper, 1)
 		minetest.register_craftitem("clothing:hat_"..color, {
 			description = color_name.." Cotton Hat",
@@ -39,40 +50,8 @@ if CLOTHING_ENABLE_CRAFTING then
 			uv_image = "clothing_uv_cape_"..color..".png",
 			groups = {clothing=1},
 		})
-		if dep then
-			minetest.register_craft({
-				output = "clothing:hat_"..color,
-				recipe = {
-					{c, c, c},
-					{c, d, c},
-				},
-			})
-			minetest.register_craft({
-				output = "clothing:shirt_"..color,
-				recipe = {
-					{c, c, c},
-					{c, c, c},
-					{c, d, c},
-				},
-			})
-			minetest.register_craft({
-				output = "clothing:pants_"..color,
-				recipe = {
-					{c, c, c},
-					{c, d, c},
-					{c, x, c},
-				},
-			})
-			minetest.register_craft({
-				output = "clothing:cape_"..color,
-				recipe = {
-					{c, d, c},
-					{c, c, c},
-					{c, c, c},
-				},
-			})
-		end
 	end
+	dofile(modpath.."/loom.lua")
 end
 
 
