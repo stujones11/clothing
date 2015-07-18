@@ -48,11 +48,17 @@ elseif minetest.get_modpath("unified_inventory") then
 	unified_inventory.register_page("clothing", {
 		get_formspec = function(player)
 			local name = player:get_player_name()
-			local formspec = "background[0.06,0.99;7.92,7.52;clothing_ui_form.png]"
+			local offset = 0
+			if minetest.setting_getbool("unified_inventory_lite") then
+				offset = 0.5
+			end
+			local formspec = "background[0.06,"..(0.99 - offset)
+				..";7.92,7.52;clothing_ui_form.png]"
 				.."label[0,0;Clothing]"
-				.."list[detached:"..name.."_clothing;clothing;0,1;2,3;]"
+				.."list[detached:"..name.."_clothing;clothing;0,"..(1 - offset)
+				..";2,3;]"
 			if CLOTHING_ENABLE_PREVIEW then
-				formspec = formspec.."image[2.5,0.75;2,4;"
+				formspec = formspec.."image[2.5,"..(0.75 - offset)..";2,4;"
 					..clothing.textures[name].preview.."]"
 			end
 			return {formspec=formspec}
