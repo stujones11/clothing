@@ -1,7 +1,7 @@
 Wool Clothing - Wool Clothing [WIP] [clothing]
 ==============================================
 
-Depends: multiskin (available as part of 3d_armor 'multiskin' branch
+Depends: multiskin (available as part of the 3d_armor 0.5.0-dev branch)
 
 Recommends: inventory_plus or unified_inventory (use only one)
 
