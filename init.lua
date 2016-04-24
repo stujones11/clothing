@@ -27,21 +27,18 @@ if CLOTHING_ENABLE_CRAFTING and minetest.get_modpath("wool") then
 			description = color_name.." Cotton Hat",
 			inventory_image = "clothing_inv_hat_"..color..".png",
 			uv_image = "clothing_uv_hat_"..color..".png",
-			preview_image = "clothing_preview_hat_"..color..".png",
 			groups = {clothing=1},
 		})
 		minetest.register_craftitem("clothing:shirt_"..color, {
 			description = color_name.." Cotton Shirt",
 			inventory_image = "clothing_inv_shirt_"..color..".png",
 			uv_image = "clothing_uv_shirt_"..color..".png",
-			preview_image = "clothing_preview_shirt_"..color..".png",
 			groups = {clothing=1},
 		})
 		minetest.register_craftitem("clothing:pants_"..color, {
 			description = color_name.." Cotton Pants",
 			inventory_image = "clothing_inv_pants_"..color..".png",
 			uv_image = "clothing_uv_pants_"..color..".png",
-			preview_image = "clothing_preview_pants_"..color..".png",
 			groups = {clothing=1},
 		})
 		minetest.register_craftitem("clothing:cape_"..color, {
