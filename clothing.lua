@@ -39,7 +39,8 @@ clothing = {
 
 if minetest.get_modpath("inventory_plus") then
 	clothing.inv_mod = "inventory_plus"
-	clothing.formspec = "size[8,8.5]button[0,0;2,0.5;main;Back]"..
+	clothing.formspec = "size[8,8.5]"..
+		"button[6,0;2,0.5;main;Back]"..
 		"list[current_player;main;0,4.5;8,4;]"
 elseif minetest.get_modpath("unified_inventory") then
 	clothing.inv_mod = "unified_inventory"
