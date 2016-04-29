@@ -49,7 +49,7 @@ elseif minetest.get_modpath("unified_inventory") then
 		image = "inventory_plus_clothing.png",
 	})
 	unified_inventory.register_page("clothing", {
-		get_formspec = function(player)
+		get_formspec = function(player, perplayer_formspec)
 			local fy = perplayer_formspec.formspec_y
 			local name = player:get_player_name()
 			local formspec = "background[0.06,"..fy..
