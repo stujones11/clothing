@@ -72,7 +72,7 @@ clothing.set_player_clothing = function(self, player)
 	if not name or not player_inv then
 		return
 	end
-	local texture = "multiskin_trans.png"
+	local clothing = "multiskin_trans.png"
 	local textures = {}
 	for i=1, 6 do
 		local stack = player_inv:get_stack("clothing", i)
@@ -87,11 +87,9 @@ clothing.set_player_clothing = function(self, player)
 		end
 	end
 	if #textures > 0 then
-		texture = table.concat(textures, "^")
+		clothing = table.concat(textures, "^")
 	end
-	self.textures[name].clothing = texture
-	multiskin[name].clothing = texture
-	multiskin:update_player_visuals(player)
+	multiskin:set_player_textures(player, {clothing=clothing})
 end
 
 clothing.update_inventory = function(self, player)
