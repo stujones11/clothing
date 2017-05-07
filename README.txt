@@ -3,10 +3,7 @@ Wool Clothing - Wool Clothing [WIP] [clothing]
 
 Depends: multiskin
 
-Recommends: inventory_plus or unified_inventory (use only one)
-
-Note that if you are using this in conjunction with 3d_armor then you MUST use
-one of the supported inventory mods.
+Recommends: sfinv, inventory_plus or unified_inventory (use only one)
 
 Adds simple clothing that can be crafted from coloured wool using a loom.
 Requires the wool mod for craft registration.

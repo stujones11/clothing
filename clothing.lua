@@ -26,14 +26,9 @@ clothing = {
 		default.gui_bg..
 		default.gui_bg_img..
 		default.gui_slots..
-		"list[current_player;main;0,4.25;8,1;]"..
-		"list[current_player;main;0,5.5;8,3;8]"..
-		"list[current_player;craft;3,0.5;3,3;]"..
-		"list[current_player;craftpreview;7,1.5;1,1;]"..
-		"image[6,1.5;1,1;gui_furnace_arrow_bg.png^[transformR270]"..
-		"listring[current_player;main]"..
-		"listring[current_player;craft]"..
-		default.get_hotbar_bg(0,4.25),
+		"list[current_player;main;0,4.7;8,1;]"..
+		"list[current_player;main;0,5.85;8,3;8]"..
+		default.get_hotbar_bg(0,4.7),
 	textures = {},
 }
 
@@ -42,7 +37,8 @@ if minetest.get_modpath("inventory_plus") then
 	clothing.formspec = "size[8,8.5]"..
 		"button[6,0;2,0.5;main;Back]"..
 		"list[current_player;main;0,4.5;8,4;]"
-elseif minetest.get_modpath("unified_inventory") then
+elseif minetest.get_modpath("unified_inventory") and
+		not unified_inventory.sfinv_compat_layer then
 	clothing.inv_mod = "unified_inventory"
 	unified_inventory.register_button("clothing", {
 		type = "image",
@@ -60,6 +56,20 @@ elseif minetest.get_modpath("unified_inventory") then
 				"listring[detached:"..name.."_clothing;clothing]"
 			return {formspec=formspec}
 		end,
+	})
+elseif minetest.get_modpath("sfinv") then
+	clothing.inv_mod = "sfinv"
+	sfinv.register_page("clothing:clothing", {
+		title = "Clothing",
+		get = function(self, player, context)
+			local name = player:get_player_name()
+			local formspec = clothing.formspec..
+				"list[detached:"..name.."_clothing;clothing;0,0.5;2,3;]"..
+				"listring[current_player;main]"..
+				"listring[detached:"..name.."_clothing;clothing]"
+			return sfinv.make_formspec(player, context,
+				formspec, false)
+		end
 	})
 end
 
@@ -112,8 +122,6 @@ clothing.update_inventory = function(self, player)
 					"listring[current_player;main]"..
 					"listring[detached:"..name.."_clothing;clothing]")
 			end
-		else
-			player:set_inventory_formspec(formspec)
 		end
 	end
 end
