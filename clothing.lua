@@ -72,7 +72,7 @@ clothing.set_player_clothing = function(self, player)
 	if not name or not player_inv then
 		return
 	end
-	local clothing = "multiskin_trans.png"
+	local clothing = "blank.png"
 	local textures = {}
 	for i=1, 6 do
 		local stack = player_inv:get_stack("clothing", i)
@@ -89,7 +89,11 @@ clothing.set_player_clothing = function(self, player)
 	if #textures > 0 then
 		clothing = table.concat(textures, "^")
 	end
-	multiskin:set_player_textures(player, {clothing=clothing})
+	local skin = multiskin.skins[name]
+	if skin then
+		skin.clothing = clothing
+		multiskin.update_player_visuals(player)
+	end
 end
 
 clothing.update_inventory = function(self, player)
@@ -170,8 +174,8 @@ minetest.register_on_joinplayer(function(player)
 
 	-- Legacy support, may be removed from future versions
 	clothing.textures[name] = {
-		clothing = "multiskin_trans.png",
-		preview = "multiskin_trans.png",
+		clothing = "blank.png",
+		preview = "blank.png",
 	}
 
 	-- FIXME There really has to be a better way of doing this..?
