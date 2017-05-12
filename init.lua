@@ -45,7 +45,7 @@ if CLOTHING_ENABLE_CRAFTING and minetest.get_modpath("wool") then
 			description = color_name.." Cotton Cape",
 			inventory_image = "clothing_inv_cape_"..color..".png",
 			uv_image = "clothing_uv_cape_"..color..".png",
-			groups = {clothing=1},
+			groups = {cape=1},
 		})
 	end
 	dofile(modpath.."/loom.lua")
