@@ -103,8 +103,8 @@ minetest.register_node("clothing:loom", {
 			local woolcol = inputstack:get_name()
 			if woolcol then
 				local color = CLOTHING_COLORS[woolcol]
-				if color then
-					local stack = output..color.." "..qty
+				if color and color.name then
+					local stack = output..color.name.." "..qty
 					if inv:room_for_item("output", stack) then
 						inv:add_item("output", stack)
 						inputstack:take_item()
