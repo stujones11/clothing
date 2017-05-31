@@ -7,9 +7,8 @@ dofile(modpath.."/clothing.lua")
 
 if minetest.get_modpath("inventory_plus") then
 	clothing.inv_mod = "inventory_plus"
-	clothing.formspec = "size[8,8.5]"..
-		"button[6,0;2,0.5;main;Back]"..
-		"list[current_player;main;0,4.5;8,4;]"
+	clothing.formspec = clothing.formspec..
+		"button[6,0;2,0.5;main;Back]"
 elseif minetest.get_modpath("unified_inventory") and
 		not unified_inventory.sfinv_compat_layer then
 	clothing.inv_mod = "unified_inventory"
@@ -62,13 +61,13 @@ minetest.register_on_joinplayer(function(player)
 	local clothing_inv = minetest.create_detached_inventory(name.."_clothing",{
 		on_put = function(inv, listname, index, stack, player)
 			player:get_inventory():set_stack(listname, index, stack)
+			clothing:run_callbacks("on_equip", player, index, stack)
 			clothing:set_player_clothing(player)
-			clothing:update_inventory(player)
 		end,
 		on_take = function(inv, listname, index, stack, player)
 			player:get_inventory():set_stack(listname, index, nil)
+			clothing:run_callbacks("on_unequip", player, index, stack)
 			clothing:set_player_clothing(player)
-			clothing:update_inventory(player)
 		end,
 		on_move = function(inv, from_list, from_index, to_list, to_index, count, player)
 			local plaver_inv = player:get_inventory()
@@ -79,7 +78,11 @@ minetest.register_on_joinplayer(function(player)
 			clothing:update_inventory(player)
 		end,
 		allow_put = function(inv, listname, index, stack, player)
-			return 1
+			local item = stack:get_name()
+			if minetest.get_item_group(item, "clothing") > 0 then
+				return 1
+			end
+			return 0
 		end,
 		allow_take = function(inv, listname, index, stack, player)
 			return stack:get_count()

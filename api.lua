@@ -6,7 +6,47 @@ clothing = {
 		"list[current_player;main;0,4.7;8,1;]"..
 		"list[current_player;main;0,5.85;8,3;8]"..
 		default.get_hotbar_bg(0,4.7),
+	registered_callbacks = {
+		on_update = {},
+		on_equip = {},
+		on_unequip = {},
+	},
 }
+
+-- CLothing callbacks
+
+clothing.register_on_update = function(self, func)
+	if type(func) == "function" then
+		table.insert(self.registered_callbacks.on_update, func)
+	end
+end
+
+clothing.register_on_equip = function(self, func)
+	if type(func) == "function" then
+		table.insert(self.registered_callbacks.on_equip, func)
+	end
+end
+
+clothing.register_on_unequip = function(self, func)
+	if type(func) == "function" then
+		table.insert(self.registered_callbacks.on_unequip, func)
+	end
+end
+
+clothing.run_callbacks = function(self, callback, player, index, stack)
+	if stack then
+		local def = stack:get_definition() or {}
+		if type(def[callback]) == "function" then
+			def[callback](player, index, stack)
+		end
+	end
+	local callbacks = self.registered_callbacks[callback]
+	if callbacks then
+		for _, func in pairs(callbacks) do
+			func(player, index, stack)
+		end
+	end
+end
 
 clothing.set_player_clothing = function(self, player)
 	if not player then
@@ -50,24 +90,5 @@ clothing.set_player_clothing = function(self, player)
 		skin.cape = cape
 		multiskin.update_player_visuals(player)
 	end
-end
-
-clothing.update_inventory = function(self, player)
-	local name = player:get_player_name()
-	if clothing.inv_mod == "unified_inventory" then
-		if unified_inventory.current_page[name] == "clothing" then
-			unified_inventory.set_inventory_formspec(player, "clothing")
-		end
-	else
-		local formspec = clothing.formspec..
-			"list[detached:"..name.."_clothing;clothing;0,0.5;2,3;]"
-		if clothing.inv_mod == "inventory_plus" then
-			local page = player:get_inventory_formspec()
-			if page:find("detached:"..name.."_clothing") then
-				inventory_plus.set_inventory_formspec(player, formspec..
-					"listring[current_player;main]"..
-					"listring[detached:"..name.."_clothing;clothing]")
-			end
-		end
-	end
+	self:run_callbacks("on_update", player)
 end
