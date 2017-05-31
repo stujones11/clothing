@@ -24,3 +24,8 @@ W = [default:pinewood]
 
 Output = [clothing:loom]
 
+Configuration
+-------------
+
+Craft registration can disabled by adding `clothing_enable_craft = false` to
+your minetest.conf file.

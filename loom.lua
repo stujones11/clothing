@@ -61,13 +61,13 @@ minetest.register_node("clothing:loom", {
 			"label[7,3.5;Output:]"..
 			"label[0,0;Clothing Loom:]"..
 			"label[1.5,1.5;Hat]"..
-			"image_button[1.5,2;1,1;clothing_inv_hat_dark_grey.png;hat; ]"..
+			"item_image_button[1.5,2;1,1;clothing:hat_grey;hat; ]"..
 			"label[4,1.5;Shirt]"..
-			"image_button[4,2;1,1;clothing_inv_shirt_dark_grey.png;shirt; ]"..
+			"item_image_button[4,2;1,1;clothing:shirt_grey;shirt; ]"..
 			"label[1.5,3;Pants]"..
-			"image_button[1.5,3.5;1,1;clothing_inv_pants_dark_grey.png;pants; ]"..
+			"item_image_button[1.5,3.5;1,1;clothing:pants_grey;pants; ]"..
 			"label[4,3;Cape]"..
-			"image_button[4,3.5;1,1;clothing_inv_cape_dark_grey.png;cape; ]"..
+			"item_image_button[4,3.5;1,1;clothing:cape_grey;cape; ]"..
 			"list[current_player;main;1,7;8,4;]")
 		meta:set_string("infotext", "Loom")
 		local inv = meta:get_inventory()
@@ -102,14 +102,13 @@ minetest.register_node("clothing:loom", {
 			local outputstack = inv:get_stack("output", 1)
 			local woolcol = inputstack:get_name()
 			if woolcol then
-				local color = CLOTHING_COLORS[woolcol]
-				if color and color.name then
-					local stack = output..color.name.." "..qty
-					if inv:room_for_item("output", stack) then
-						inv:add_item("output", stack)
-						inputstack:take_item()
-						inv:set_stack("input", 1, inputstack)
-					end
+				local color = woolcol:gsub("wool:", "")
+				local stack = output..color.." "..qty
+				if minetest.registered_items[output..color] and
+						inv:room_for_item("output", stack) then
+					inv:add_item("output", stack)
+					inputstack:take_item()
+					inv:set_stack("input", 1, inputstack)
 				end
 			end
 		end
@@ -126,4 +125,3 @@ minetest.register_craft({
 		{'default:pinewood', "default:pinewood", 'default:pinewood'},
 	},
 })
-
