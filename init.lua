@@ -79,7 +79,8 @@ minetest.register_on_joinplayer(function(player)
 		end,
 		allow_put = function(inv, listname, index, stack, player)
 			local item = stack:get_name()
-			if minetest.get_item_group(item, "clothing") > 0 then
+			if minetest.get_item_group(item, "clothing") > 0 or
+					minetest.get_item_group(item, "cape") > 0 then
 				return 1
 			end
 			return 0
