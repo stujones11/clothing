@@ -75,7 +75,6 @@ minetest.register_on_joinplayer(function(player)
 			player_inv:set_stack(to_list, to_index, stack)
 			player_inv:set_stack(from_list, from_index, nil)
 			clothing:set_player_clothing(player)
-			clothing:update_inventory(player)
 		end,
 		allow_put = function(inv, listname, index, stack, player)
 			local item = stack:get_name()
@@ -103,8 +102,5 @@ minetest.register_on_joinplayer(function(player)
 	end
 	minetest.after(1, function(player)
 		clothing:set_player_clothing(player)
-		if not clothing.inv_mod then
-			clothing:update_inventory(player)
-		end
 	end, player)
 end)
