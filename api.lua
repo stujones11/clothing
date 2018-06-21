@@ -11,6 +11,7 @@ clothing = {
 		on_equip = {},
 		on_unequip = {},
 	},
+	player_textures = {},
 }
 
 -- CLothing callbacks
@@ -76,19 +77,25 @@ clothing.set_player_clothing = function(self, player)
 			end
 		end
 	end
-	local clothing = table.concat(layer.clothing, "^")
-	local cape = table.concat(layer.cape, "^")
-	if clothing == "" then
-		clothing = "blank.png"
+	local clothing_out = table.concat(layer.clothing, "^")
+	local cape_out = table.concat(layer.cape, "^")
+	if clothing_out == "" then
+		clothing_out = "blank.png"
 	end
-	if cape == "" then
-		cape = "blank.png"
+	if cape_out == "" then
+		cape_out = "blank.png"
 	end
-	local skin = multiskin.skins[name]
-	if skin then
-		skin.clothing = clothing
-		skin.cape = cape
-		multiskin.update_player_visuals(player)
+	if minetest.global_exists("multiskin") then
+		local skin = multiskin.skins[name]
+		if skin then
+			skin.clothing = clothing_out
+			skin.cape = cape_out
+			multiskin.update_player_visuals(player)
+		end
+	else
+		clothing.player_textures[name] = clothing.player_textures[name] or {}
+		clothing.player_textures[name].clothing = clothing_out
+		clothing.player_textures[name].cape = cape_out
 	end
 	self:run_callbacks("on_update", player)
 end
