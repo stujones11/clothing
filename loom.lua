@@ -120,8 +120,8 @@ minetest.register_node("clothing:loom", {
 minetest.register_craft({
 	output = 'clothing:loom',
 	recipe = {
-		{'group:stick', 'default:pinewood', 'group:stick'},
-		{'group:stick', 'default:pinewood', 'group:stick'},
-		{'default:pinewood', "default:pinewood", 'default:pinewood'},
+		{'group:stick', 'group:wood', 'group:stick'},
+		{'group:stick', 'group:wood', 'group:stick'},
+		{'group:wood', "group:wood", 'group:wood'},
 	},
 })
